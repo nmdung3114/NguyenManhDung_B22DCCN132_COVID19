@@ -1,3 +1,27 @@
+# Thêm ở đầu app.py - TRÊN TẤT CẢ CÁC IMPORT KHÁC
+import streamlit as st
+import sys
+import os
+
+try:
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import plotly.express as px
+    import plotly.graph_objects as go
+    from wordcloud import WordCloud
+    import requests
+    from datetime import datetime
+    import warnings
+    warnings.filterwarnings('ignore')
+    
+    HAS_ALL_DEPS = True
+except ImportError as e:
+    st.error(f"📦 Thiếu package: {e}")
+    HAS_ALL_DEPS = False
+
+# Phần còn lại của code...
 # app.py
 import streamlit as st
 import pandas as pd

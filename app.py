@@ -1,3 +1,30 @@
+import streamlit as st
+import sys
+
+# Kiểm tra và import an toàn
+try:
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import plotly.express as px
+    import plotly.graph_objects as go
+    import requests
+    from datetime import datetime
+    import warnings
+    warnings.filterwarnings('ignore')
+    
+    # Thử import wordcloud, nếu lỗi thì bỏ qua
+    try:
+        from wordcloud import WordCloud
+        HAS_WORDCLOUD = True
+    except ImportError:
+        HAS_WORDCLOUD = False
+        
+    HAS_ALL_DEPS = True
+except Exception as e:
+    st.error(f"❌ Lỗi import: {e}")
+    HAS_ALL_DEPS = False
 # Thêm ở đầu app.py - TRÊN TẤT CẢ CÁC IMPORT KHÁC
 import streamlit as st
 import sys

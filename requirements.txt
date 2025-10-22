@@ -1,3 +1,10 @@
+# streamlit
+# pandas
+# numpy
+# matplotlib
+# seaborn
+# plotly
+# requests
 streamlit
 pandas
 numpy
@@ -5,3 +12,6 @@ matplotlib
 seaborn
 plotly
 requests
+scikit-learn
+scipy
+networkx

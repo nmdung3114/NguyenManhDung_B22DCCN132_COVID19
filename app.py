@@ -1236,42 +1236,42 @@ with tab5:
 with tab6:
     st.header("🔍 INSIGHTS & PHÁT HIỆN ĐẶC BIỆT")
     
-    col1, col2 = st.columns(2)
+col1, col2 = st.columns(2)
+
+with col1:
+    st.markdown("""
+    <div class='insight-box'>
+    <h3>🎯 INSIGHT 1: PHÂN HÓA THEO CHÂU LỤC</h3>
+    <p><strong>Phát hiện:</strong> Tỉ lệ tử vong có sự khác biệt đáng kể giữa các châu lục</p>
+    <p><strong>Ý nghĩa:</strong> Yếu tố địa lý và hệ thống y tế khu vực ảnh hưởng lớn đến kết quả kiểm soát dịch</p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    with col1:
-        st.markdown("""
-        <div class='insight-box'>
-        <h3>🎯 INSIGHT 1: PHÂN HÓA THEO CHÂU LỤC</h3>
-        <p><strong>Phát hiện:</strong> Tỉ lệ tử vong có sự khác biệt đáng kể giữa các châu lục</p>
-        <p><strong>Ý nghĩa:</strong> Yếu tố địa lý và hệ thống y tế khu vực ảnh hưởng lớn đến kết quả kiểm soát dịch</p>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <div class='insight-box' style='background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);'>
-        <h3>📊 INSIGHT 2: TƯƠNG QUAN MẠNH</h3>
-        <p><strong>Phát hiện:</strong> Mối quan hệ tuyến tính rõ ràng giữa số ca nhiễm và tử vong</p>
-        <p><strong>Ý nghĩa:</strong> Kiểm soát lây nhiễm là chìa khóa then chốt để giảm tử vong</p>
-        </div>
-        """, unsafe_allow_html=True)
+    st.markdown("""
+    <div class='insight-box' style='background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);'>
+    <h3>📊 INSIGHT 2: TƯƠNG QUAN MẠNH</h3>
+    <p><strong>Phát hiện:</strong> Mối quan hệ tuyến tính rõ ràng giữa số ca nhiễm và tử vong</p>
+    <p><strong>Ý nghĩa:</strong> Kiểm soát lây nhiễm là chìa khóa then chốt để giảm tử vong</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown("""
+    <div class='insight-box' style='background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);'>
+    <h3>🔬 INSIGHT 3: PHÂN CỤM TỰ NHIÊN</h3>
+    <p><strong>Phát hiện:</strong> Các quốc gia tự động phân thành 4 nhóm dịch tễ rõ rệt</p>
+    <p><strong>Ý nghĩa:</strong> Có thể xây dựng chiến lược theo nhóm thay vì từng quốc gia riêng lẻ</p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    with col2:
-        st.markdown("""
-        <div class='insight-box' style='background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);'>
-        <h3>🔬 INSIGHT 3: PHÂN CỤM TỰ NHIÊN</h3>
-        <p><strong>Phát hiện:</strong> Các quốc gia tự động phân thành 4 nhóm dịch tễ rõ rệt</p>
-        <p><strong>Ý nghĩa:</strong> Có thể xây dựng chiến lược theo nhóm thay vì từng quốc gia riêng lẻ</p>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("""
-        <div class='insight-box' style='background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);'>
-        <h3>💡 INSIGHT 4: THÀNH CÔNG CỦA {selected_country.upper()}</h3>
-        <p><strong>Phát hiện:</strong> {selected_country} nằm trong nhóm kiểm soát tốt tỉ lệ tử vong</p>
-        <p><strong>Ý nghĩa:</strong> Có thể trở thành case study cho các quốc gia đang phát triển</p>
-        </div>
-        """.format(selected_country=selected_country), unsafe_allow_html=True)
-    
+    # SỬA LỖI Ở ĐÂY - Sử dụng f-string thay vì .format()
+    st.markdown(f"""
+    <div class='insight-box' style='background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);'>
+    <h3>💡 INSIGHT 4: THÀNH CÔNG CỦA {selected_country.upper()}</h3>
+    <p><strong>Phát hiện:</strong> {selected_country} nằm trong nhóm kiểm soát tốt tỉ lệ tử vong</p>
+    <p><strong>Ý nghĩa:</strong> Có thể trở thành case study cho các quốc gia đang phát triển</p>
+    </div>
+    """, unsafe_allow_html=True)
     # Thống kê nhanh
     st.subheader("📈 THỐNG KÊ NHANH")
     

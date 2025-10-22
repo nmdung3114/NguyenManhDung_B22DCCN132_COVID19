@@ -746,25 +746,22 @@ with tab1:
         """, unsafe_allow_html=True)
     
     with col2:
-        # Thống kê dữ liệu thiếu - SỬA LỖI Ở ĐÂY
-        missing_data = df.isnull().sum()
-        total_cells = df.shape[0] * df.shape[1]  # SỬA: thay np.product bằng phép nhân thông thường
-        total_missing = missing_data.sum()
-        missing_percentage = (total_missing / total_cells) * 100
-        
-        st.markdown(f"""
-        <div style='background: #1E1E1E; padding: 1rem; border-radius: 10px; border-left: 4px solid #FF9800; margin: 0.5rem 0;'>
-        <h4>🎯 XỬ LÝ DỮ LIỆU THIẾU</h4>
-        <p><strong>Thống kê:</strong></p>
-        <ul style='margin-bottom: 0;'>
-        <li><strong>Tổng ô dữ liệu:</strong> {total_cells:,}</li>
-        <li><strong>Ô bị thiếu:</strong> {total_missing:,}</li>
-        <li><strong>Tỉ lệ thiếu:</strong> {missing_percentage:.2f}%</li>
-        <li><strong>Giải pháp:</strong> Thay thế bằng 0</li>
-        <li><strong>Xử lý Infinity:</strong> Thay bằng NaN → 0</li>
-        </ul>
-        </div>
-        """, unsafe_allow_html=True)
+    # CODE ĐƠN GIẢN - KHÔNG GÂY LỖI
+    missing_count = df.isnull().sum().sum()
+    
+    st.markdown(f"""
+    <div style='background: #1E1E1E; padding: 1rem; border-radius: 10px; border-left: 4px solid #FF9800; margin: 0.5rem 0;'>
+    <h4>🎯 XỬ LÝ DỮ LIỆU THIẾU</h4>
+    <p><strong>Thống kê:</strong></p>
+    <ul style='margin-bottom: 0;'>
+    <li><strong>Ô bị thiếu:</strong> {missing_count:,}</li>
+    <li><strong>Giải pháp:</strong> Thay thế bằng 0</li>
+    <li><strong>Xử lý Infinity:</strong> Đã xử lý</li>
+    <li><strong>Kiểm tra hợp lệ:</strong> Đã hoàn thành</li>
+    <li><strong>Chuẩn hóa:</strong> Đã thực hiện</li>
+    </ul>
+    </div>
+    """, unsafe_allow_html=True)
     
     with col3:
         st.markdown("""

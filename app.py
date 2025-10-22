@@ -746,9 +746,9 @@ with tab1:
         """, unsafe_allow_html=True)
     
     with col2:
-        # Thống kê dữ liệu thiếu - SỬA LỖI Ở ĐÂY
+        # Thống kê dữ liệu thiếu
         missing_data = df.isnull().sum()
-        total_cells = df.shape[0] * df.shape[1]  # Sửa từ np.product(df.shape)
+        total_cells = df.shape[0] * df.shape[1]
         total_missing = missing_data.sum()
         missing_percentage = (total_missing / total_cells) * 100
         

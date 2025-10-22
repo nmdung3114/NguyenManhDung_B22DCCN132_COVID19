@@ -1,63 +1,10 @@
 import streamlit as st
-import sys
-
-# Kiểm tra và import an toàn
-try:
-    import pandas as pd
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-    import plotly.express as px
-    import plotly.graph_objects as go
-    import requests
-    from datetime import datetime
-    import warnings
-    warnings.filterwarnings('ignore')
-    
-    # Thử import wordcloud, nếu lỗi thì bỏ qua
-    try:
-        from wordcloud import WordCloud
-        HAS_WORDCLOUD = True
-    except ImportError:
-        HAS_WORDCLOUD = False
-        
-    HAS_ALL_DEPS = True
-except Exception as e:
-    st.error(f"❌ Lỗi import: {e}")
-    HAS_ALL_DEPS = False
-# Thêm ở đầu app.py - TRÊN TẤT CẢ CÁC IMPORT KHÁC
-import streamlit as st
-import sys
-import os
-
-try:
-    import pandas as pd
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-    import plotly.express as px
-    import plotly.graph_objects as go
-    from wordcloud import WordCloud
-    import requests
-    from datetime import datetime
-    import warnings
-    warnings.filterwarnings('ignore')
-    
-    HAS_ALL_DEPS = True
-except ImportError as e:
-    st.error(f"📦 Thiếu package: {e}")
-    HAS_ALL_DEPS = False
-
-# Phần còn lại của code...
-# app.py
-import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
 import plotly.graph_objects as go
-from wordcloud import WordCloud
 import requests
 from datetime import datetime
 import warnings
@@ -171,7 +118,7 @@ country_data = df[df['Quốc_Gia'] == selected_country]
 # Tab chính
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "📊 TỔNG QUAN", "📈 BIỂU ĐỒ STATIC", "🎨 BIỂU ĐỒ TƯƠNG TÁC", 
-    "☁️ WORDCLOUD", "📖 BÁO CÁO"
+    "📊 BIỂU ĐỒ BỔ SUNG", "📖 BÁO CÁO"
 ])
 
 with tab1:
@@ -397,26 +344,54 @@ with tab3:
     st.plotly_chart(fig, use_container_width=True)
 
 with tab4:
-    st.header("☁️ WORDCLOUD - YÊU CẦU 3.6")
+    st.header("📊 BIỂU ĐỒ BỔ SUNG - YÊU CẦU 3.6")
     
-    # Tạo wordcloud
-    word_freq = {}
-    for _, row in df.iterrows():
-        size = max(10, int(row['Tổng_Ca_Nhiễm'] / 1000000))
-        word_freq[row['Quốc_Gia']] = size
+    # Thay thế WordCloud bằng Pie chart và Donut chart
+    st.subheader("Phân Bố Số Ca Nhiễm Theo Châu Lục")
     
-    wordcloud = WordCloud(width=800, height=400, 
-                          background_color='white',
-                          colormap='Reds',
-                          max_words=50).generate_from_frequencies(word_freq)
+    continent_cases = df.groupby('Châu_Lục')['Tổng_Ca_Nhiễm'].sum().reset_index()
     
-    fig, ax = plt.subplots(figsize=(12, 6))
-    ax.imshow(wordcloud, interpolation='bilinear')
-    ax.axis('off')
-    ax.set_title('WORDCLOUD CÁC QUỐC GIA THEO SỐ CA NHIỄM\n(Kích thước thể hiện mức độ ảnh hưởng)', 
-                fontsize=14, fontweight='bold', pad=20)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
     
+    # Pie chart
+    ax1.pie(continent_cases['Tổng_Ca_Nhiễm'], 
+            labels=continent_cases['Châu_Lục'],
+            autopct='%1.1f%%',
+            colors=sns.color_palette("Set3"),
+            startangle=90)
+    ax1.set_title('PHÂN BỐ CA NHIỄM THEO CHÂU LỤC', fontweight='bold')
+    
+    # Bar chart horizontal
+    continent_cases_sorted = continent_cases.sort_values('Tổng_Ca_Nhiễm', ascending=True)
+    ax2.barh(continent_cases_sorted['Châu_Lục'], 
+             continent_cases_sorted['Tổng_Ca_Nhiễm'],
+             color=sns.color_palette("viridis", len(continent_cases)))
+    ax2.set_xlabel('Tổng Ca Nhiễm')
+    ax2.set_title('SỐ CA NHIỄM THEO CHÂU LỤC', fontweight='bold')
+    
+    # Thêm giá trị trên cột
+    for i, v in enumerate(continent_cases_sorted['Tổng_Ca_Nhiễm']):
+        ax2.text(v + v*0.01, i, f'{v:,.0f}', va='center', fontweight='bold')
+    
+    plt.tight_layout()
     st.pyplot(fig)
+    
+    # Biểu đồ tương tác bổ sung
+    st.subheader("So Sánh Tỉ Lệ Khỏi Bệnh Các Quốc Gia")
+    
+    top_recovery = df.nlargest(15, 'Tỉ_Lệ_Khỏi_Bệnh')
+    
+    fig = px.bar(top_recovery,
+                 x='Quốc_Gia',
+                 y='Tỉ_Lệ_Khỏi_Bệnh',
+                 color='Tỉ_Lệ_Khỏi_Bệnh',
+                 title='<b>TOP 15 QUỐC GIA CÓ TỈ LỆ KHỎI BỆNH CAO NHẤT</b>',
+                 labels={'Tỉ_Lệ_Khỏi_Bệnh': 'Tỉ Lệ Khỏi Bệnh (%)'},
+                 text='Tỉ_Lệ_Khỏi_Bệnh')
+    
+    fig.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
+    fig.update_layout(template='plotly_white', height=500, xaxis_tickangle=-45)
+    st.plotly_chart(fig, use_container_width=True)
 
 with tab5:
     st.header("📖 BÁO CÁO PHÂN TÍCH - YÊU CẦU 5")
@@ -424,11 +399,12 @@ with tab5:
     # Tạo báo cáo storytelling
     if len(country_data) > 0:
         country_death_rate = country_data['Tỉ_Lệ_Tử_Vong'].iloc[0]
+        country_recovery_rate = country_data['Tỉ_Lệ_Khỏi_Bệnh'].iloc[0] if 'Tỉ_Lệ_Khỏi_Bệnh' in country_data.columns else 0
         country_cases_per_million = country_data['Ca_Nhiễm_Triệu_Dân'].iloc[0]
         world_avg_death_rate = df['Tỉ_Lệ_Tử_Vong'].mean()
         world_avg_cases_per_million = df['Ca_Nhiễm_Triệu_Dân'].mean()
     else:
-        country_death_rate = world_avg_death_rate = world_avg_cases_per_million = 0
+        country_death_rate = country_recovery_rate = world_avg_death_rate = world_avg_cases_per_million = 0
     
     storytelling_content = f"""
     # 📊 BÁO CÁO PHÂN TÍCH COVID-19
@@ -452,6 +428,7 @@ with tab5:
     - **Tổng ca nhiễm:** {country_data['Tổng_Ca_Nhiễm'].iloc[0] if len(country_data) > 0 else 'N/A':,}
     - **Tổng tử vong:** {country_data['Tổng_Tử_Vong'].iloc[0] if len(country_data) > 0 else 'N/A':,}
     - **Tỉ lệ tử vong:** {country_death_rate:.2f}% ({'THẤP HƠN' if country_death_rate < world_avg_death_rate else 'CAO HƠN'} trung bình thế giới)
+    - **Tỉ lệ khỏi bệnh:** {country_recovery_rate:.1f}%
     - **Ca nhiễm/1 triệu dân:** {country_cases_per_million:,.0f} ca
 
     #### 📊 SO SÁNH VỚI TRUNG BÌNH THẾ GIỚI:

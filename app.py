@@ -723,7 +723,7 @@ with tab1:
     
     # Dữ liệu thô
     st.subheader("📋 DỮ LIỆU THÔ (10 dòng đầu)")
-    st.dataframe(df.head(10), use_container_width=True)
+    st.dataframe(df.head(10), width='stretch')
     
     # PHẦN MỚI: CHI TIẾT XỬ LÝ DỮ LIỆU
     st.subheader("🔧 CHI TIẾT XỬ LÝ DỮ LIỆU")
@@ -746,22 +746,23 @@ with tab1:
         """, unsafe_allow_html=True)
     
     with col2:
-    # CODE ĐƠN GIẢN - KHÔNG GÂY LỖI
-    missing_count = df.isnull().sum().sum()
-    
-    st.markdown(f"""
-    <div style='background: #1E1E1E; padding: 1rem; border-radius: 10px; border-left: 4px solid #FF9800; margin: 0.5rem 0;'>
-    <h4>🎯 XỬ LÝ DỮ LIỆU THIẾU</h4>
-    <p><strong>Thống kê:</strong></p>
-    <ul style='margin-bottom: 0;'>
-    <li><strong>Ô bị thiếu:</strong> {missing_count:,}</li>
-    <li><strong>Giải pháp:</strong> Thay thế bằng 0</li>
-    <li><strong>Xử lý Infinity:</strong> Đã xử lý</li>
-    <li><strong>Kiểm tra hợp lệ:</strong> Đã hoàn thành</li>
-    <li><strong>Chuẩn hóa:</strong> Đã thực hiện</li>
-    </ul>
-    </div>
-    """, unsafe_allow_html=True)
+        # Thống kê dữ liệu thiếu - ĐÃ SỬA LỖI
+        missing_count = df.isnull().sum().sum()
+        total_cells = df.shape[0] * df.shape[1]  # SỬA: không dùng np.product
+        
+        st.markdown(f"""
+        <div style='background: #1E1E1E; padding: 1rem; border-radius: 10px; border-left: 4px solid #FF9800; margin: 0.5rem 0;'>
+        <h4>🎯 XỬ LÝ DỮ LIỆU THIẾU</h4>
+        <p><strong>Thống kê:</strong></p>
+        <ul style='margin-bottom: 0;'>
+        <li><strong>Tổng ô dữ liệu:</strong> {total_cells:,}</li>
+        <li><strong>Ô bị thiếu:</strong> {missing_count:,}</li>
+        <li><strong>Giải pháp:</strong> Thay thế bằng 0</li>
+        <li><strong>Xử lý Infinity:</strong> Thay bằng NaN → 0</li>
+        <li><strong>Kiểm tra hợp lệ:</strong> Đã hoàn thành</li>
+        </ul>
+        </div>
+        """, unsafe_allow_html=True)
     
     with col3:
         st.markdown("""
@@ -795,13 +796,13 @@ with tab1:
             })
         
         info_df = pd.DataFrame(data_info)
-        st.dataframe(info_df, use_container_width=True)
+        st.dataframe(info_df, width='stretch')
         
         # Thống kê số học
         st.write("**Thống kê số học cho các cột numeric:**")
         numeric_cols = df.select_dtypes(include=[np.number]).columns
         if len(numeric_cols) > 0:
-            st.dataframe(df[numeric_cols].describe(), use_container_width=True)
+            st.dataframe(df[numeric_cols].describe(), width='stretch')
     
     # THÔNG TIN VỀ CÁC CỘT MỚI
     with st.expander("🔍 **THÔNG TIN CÁC CỘT ĐẶC TRƯNG MỚI**"):
@@ -824,7 +825,7 @@ with tab1:
         # Hiển thị phân bố mức độ ảnh hưởng
         st.write("**📊 Phân bố Mức_Độ_Ảnh_Hưởng:**")
         impact_distribution = df['Mức_Độ_Ảnh_Hưởng'].value_counts()
-        st.dataframe(impact_distribution, use_container_width=True)
+        st.dataframe(impact_distribution, width='stretch')
 
 with tab2:
     st.header("📊 BIỂU ĐỒ STATIC - YÊU CẦU 3")
